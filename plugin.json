@@ -1,0 +1,8 @@
+{
+  "id": "games",
+  "name": "Games",
+  "description": "Mini games in a pane: 2048, Minesweeper, Snake, Sudoku, Tetris, Words, Solitaire and Sokoban. Each is saved as you play and comes back after a restart.",
+  "icon": "Gamepad2",
+  "version": "1.0.0",
+  "minDeck": "0.19.0"
+}
