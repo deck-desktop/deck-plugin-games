@@ -103,7 +103,7 @@ export async function flush(): Promise<void> {
   const text = JSON.stringify(saved);
   if (text === lastText) return;
   lastText = text;
-  await configWrite(CFG, text).catch(() => { lastText = ""; });
+  await configWrite(CFG, text).catch((e) => { console.warn("[games] save failed", e); lastText = ""; });
 }
 
 // The last second of play is not lost to a window being hidden or closed: write it then.
