@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Flag, RotateCcw } from "lucide-react";
 import { useGame } from "../store";
 import { LEVELS, chord, count, minesLeft, newGame, restore, reveal, toggleFlag, type Level, type StateMines } from "./gmines";
-import { Btn, Overlay, Stat, clockText as clock, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
+import { Btn, Choice, Overlay, Stat, clockText as clock, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
 
 const ID = "minesweeper";
 const NUM = ["", "#6ea8fe", "#63c174", "#ff6b6b", "#b197fc", "#ffa94d", "#3bc9db", "#e6e6ea", "#adb5bd"];
@@ -61,13 +61,9 @@ export function GameMines() {
         <Stat label="Mines" value={minesLeft(state)} />
         <Stat label="Time" value={clock(shown)} />
         <Stat label="Best" value={best === undefined ? "–" : clock(best)} />
-        <span className="ml-auto flex flex-wrap gap-1">
-          {(Object.keys(LEVELS) as Level[]).map((l) => (
-            <button key={l} onClick={() => restart(l)}
-              className={`rounded-md px-2 py-1 text-[12px] transition ${l === state.level ? "bg-accent-soft text-text-primary" : "text-text-muted hover:text-text-primary"}`}>
-              {LEVELS[l].label}
-            </button>
-          ))}
+        <span className="ml-auto flex flex-wrap gap-1.5">
+          <Choice value={state.level} onPick={(l) => restart(l)}
+            options={(Object.keys(LEVELS) as Level[]).map((l) => ({ value: l, label: LEVELS[l].label }))} />
           <Btn onClick={() => restart()} title="New game (N)"><RotateCcw size={12} /> New</Btn>
         </span>
       </div>
@@ -95,13 +91,13 @@ export function GameMines() {
             })}
             {state.status === "lost" && (
               <Overlay title="Boom">
-                <Btn onClick={() => restart()}>Try again</Btn>
+                <Btn onClick={() => restart()} primary>Try again</Btn>
               </Overlay>
             )}
             {state.status === "won" && (
               <Overlay title="Cleared!">
                 <div className="text-[13px] text-white/80">{clock(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
-                <Btn onClick={() => restart()}>New game</Btn>
+                <Btn onClick={() => restart()} primary>New game</Btn>
               </Overlay>
             )}
           </div>

@@ -115,20 +115,20 @@ export function GameTetris() {
               {state.status === "over" && (
                 <Overlay title="Game over">
                   <div className="text-[13px] text-white/80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
-                  <Btn onClick={restart}>New game</Btn>
+                  <Btn onClick={restart} primary>New game</Btn>
                 </Overlay>
               )}
             </div>
             <div className="flex flex-col gap-3" style={{ width: side }}>
               <div>
-                <div className="mb-1 text-[10px] uppercase tracking-wide text-text-muted">Next</div>
-                <div className="flex flex-col gap-2 rounded-md bg-elev p-2">
+                <div className="mb-1 text-[12px] font-medium text-text-secondary">Next</div>
+                <div className="flex flex-col gap-2 rounded-lg border border-subtle bg-elev p-2">
                   {state.queue.slice(0, 3).map((k, i) => <Mini key={i} kind={k} size={side - 16} />)}
                 </div>
               </div>
               <div>
-                <div className="mb-1 text-[10px] uppercase tracking-wide text-text-muted">Hold (C)</div>
-                <div className="rounded-md bg-elev p-2"><Mini kind={state.hold} size={side - 16} dim={!state.canHold} /></div>
+                <div className="mb-1 text-[12px] font-medium text-text-secondary">Hold (C)</div>
+                <div className="rounded-lg border border-subtle bg-elev p-2"><Mini kind={state.hold} size={side - 16} dim={!state.canHold} /></div>
               </div>
             </div>
           </>

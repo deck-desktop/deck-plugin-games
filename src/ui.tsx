@@ -29,19 +29,55 @@ export function useFit<T extends HTMLElement>(): [React.RefObject<T | null>, num
 /** A labelled number in a game's header (score, best, mines left, time). */
 export function Stat({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex min-w-[56px] flex-col items-center rounded-md bg-elev px-2.5 py-1 leading-tight">
-      <span className="text-[10px] uppercase tracking-wide text-text-muted">{label}</span>
+    <div className="flex min-w-[56px] flex-col items-center rounded-lg border border-subtle bg-elev px-2.5 py-1 leading-tight">
+      <span className="text-[10.5px] text-text-muted">{label}</span>
       <span className="font-mono text-[14px] font-semibold text-text-primary">{value}</span>
     </div>
   );
 }
 
-export function Btn({ children, onClick, title, disabled }: { children: React.ReactNode; onClick: () => void; title?: string; disabled?: boolean }) {
+/**
+ * A button in a game's chrome. Secondary by default; `primary` is the one filled action a screen
+ * offers (New game on a game-over card), and `on` lights a toggle that is switched on.
+ */
+export function Btn({ children, onClick, title, disabled, primary, on }: {
+  children: React.ReactNode; onClick: () => void; title?: string; disabled?: boolean; primary?: boolean; on?: boolean;
+}) {
   return (
-    <button onClick={onClick} title={title} disabled={disabled}
-      className="inline-flex items-center gap-1 rounded-md border border-subtle bg-elev px-2.5 py-1 text-[12px] text-text-secondary transition hover:border-strong hover:text-text-primary disabled:opacity-40">
+    <button onClick={onClick} title={title} disabled={disabled} aria-pressed={on}
+      className={"inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] transition-colors disabled:opacity-40 "
+        + (primary ? "font-medium text-white hover:brightness-110"
+          : on ? "border border-subtle text-text-primary"
+          : "border border-subtle text-text-secondary hover:border-strong hover:text-text-primary disabled:hover:border-subtle")}
+      style={primary ? { background: "var(--accent)" }
+        : on ? { background: "var(--accent-soft)", boxShadow: "inset 0 0 0 1px var(--accent)" }
+        : { background: "var(--bg-elev)" }}>
       {children}
     </button>
+  );
+}
+
+/**
+ * One of a few choices (a level, a difficulty, a mode), as one group with the chosen one lit.
+ * Picking the one already chosen still calls `onPick`: for most games that starts it again.
+ */
+export function Choice<T extends string | number>({ options, value, onPick }: {
+  options: { value: T; label: React.ReactNode; title?: string }[]; value: T; onPick: (v: T) => void;
+}) {
+  return (
+    <div className="flex items-center gap-0.5 rounded-lg border border-subtle bg-elev p-0.5">
+      {options.map((o) => {
+        const on = o.value === value;
+        return (
+          <button key={String(o.value)} onClick={() => onPick(o.value)} title={o.title} aria-pressed={on}
+            className={"inline-flex h-7 items-center gap-1 rounded-md px-2 text-[12px] transition-colors "
+              + (on ? "text-text-primary" : "text-text-muted hover:bg-white/5 hover:text-text-primary")}
+            style={on ? { background: "var(--accent-soft)" } : undefined}>
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -49,7 +85,7 @@ export function Btn({ children, onClick, title, disabled }: { children: React.Re
 export function Overlay({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-black/60 text-center backdrop-blur-[2px]">
-      <div className="text-[22px] font-bold text-white">{title}</div>
+      <div className="text-[20px] font-semibold text-white">{title}</div>
       {children}
     </div>
   );

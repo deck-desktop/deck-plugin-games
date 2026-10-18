@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw } from "lucide-react";
 import { useGame } from "../store";
 import { LEN, TRIES, erase, keyMarks, mark, newGame, restore, submit, type, type Mark, type Mode, type StateWords } from "./gwords";
-import { Btn, useFocusOnMount } from "../ui";
+import { Btn, Choice, useFocusOnMount } from "../ui";
 
 const COLORS: Record<Mark, string> = { hit: "#3d9a50", near: "#c49a1f", miss: "#3a3d4a" };
 /** A letter already ruled out: red on the keyboard, and red when typed into a new guess. */
@@ -52,12 +52,10 @@ export function GameWords() {
     <div ref={focusRef} tabIndex={0} onKeyDown={onKey} onMouseDown={() => focusRef.current?.focus({ preventScroll: true })}
       className="flex h-full min-h-0 flex-col items-center gap-3 overflow-y-auto p-3 outline-none">
       <div className="flex w-full flex-wrap items-center gap-1.5">
-        {(["daily", "unlimited"] as Mode[]).map((m) => (
-          <button key={m} onClick={() => setMode(m)}
-            className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] transition ${m === mode ? "bg-accent-soft text-text-primary" : "text-text-muted hover:text-text-primary"}`}>
-            {m === "daily" ? <CalendarDays size={12} /> : <InfinityIcon size={12} />} {m === "daily" ? "Daily" : "Unlimited"}
-          </button>
-        ))}
+        <Choice value={mode} onPick={setMode} options={[
+          { value: "daily" as Mode, label: <><CalendarDays size={12} /> Daily</> },
+          { value: "unlimited" as Mode, label: <><InfinityIcon size={12} /> Unlimited</> },
+        ]} />
         <span className="ml-auto text-[11px] text-text-muted">{mode === "daily" ? state.date : `${st.played} played`}</span>
         {mode === "unlimited" && <Btn onClick={() => saveFree(newGame("unlimited", free.stats))} title="A new word"><RotateCcw size={12} /> New</Btn>}
       </div>
@@ -85,7 +83,7 @@ export function GameWords() {
       </motion.div>
 
       {done && (
-        <div className="w-full max-w-[320px] rounded-lg border border-subtle bg-card p-3 text-center">
+        <div className="w-full max-w-[320px] rounded-lg border border-subtle bg-elev p-3 text-center">
           <div className="text-[15px] font-semibold text-text-primary">
             {state.status === "won" ? ["Genius", "Magnificent", "Impressive", "Splendid", "Great", "Phew"][state.guesses.length - 1] : "Out of tries"}
           </div>
@@ -109,7 +107,7 @@ export function GameWords() {
           </div>
           {mode === "daily"
             ? <div className="mt-2 text-[11px] text-text-muted">A new word tomorrow. Unlimited has as many as you like.</div>
-            : <div className="mt-2"><Btn onClick={() => saveFree(newGame("unlimited", free.stats))}>Next word</Btn></div>}
+            : <div className="mt-2"><Btn onClick={() => saveFree(newGame("unlimited", free.stats))} primary>Next word</Btn></div>}
         </div>
       )}
 

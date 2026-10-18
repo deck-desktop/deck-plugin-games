@@ -57,14 +57,14 @@ export function GameSokoban() {
       </div>
       <div className="flex items-center justify-center gap-1">
         <button onClick={() => goTo(state.level - 1)} disabled={state.level === 0} title="Previous level"
-          className="rounded-md p-1 text-text-muted transition hover:bg-white/5 hover:text-text-primary disabled:opacity-30"><ChevronLeft size={16} /></button>
-        <span className="inline-flex min-w-[96px] items-center justify-center gap-1 text-[13px] font-semibold text-text-primary">
+          className="grid size-7 place-items-center rounded-lg text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary disabled:opacity-30 disabled:hover:bg-transparent"><ChevronLeft size={15} /></button>
+        <span className="inline-flex min-w-[96px] items-center justify-center gap-1 text-[12.5px] font-medium text-text-primary">
           Level {state.level + 1}{best !== undefined && <Check size={13} className="text-accent" />}
         </span>
         <button onClick={() => goTo(state.level + 1)} disabled={!open(state.level + 1)} title={open(state.level + 1) ? "Next level" : "Solve this one first"}
-          className="rounded-md p-1 text-text-muted transition hover:bg-white/5 hover:text-text-primary disabled:opacity-30"><ChevronRight size={16} /></button>
+          className="grid size-7 place-items-center rounded-lg text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary disabled:opacity-30 disabled:hover:bg-transparent"><ChevronRight size={15} /></button>
         {furthest + 1 > state.level + 1 && (
-          <button onClick={() => goTo(furthest + 1)} className="ml-1 rounded-md px-2 py-0.5 text-[11px] text-text-muted hover:text-text-primary">Latest ({furthest + 2}) »</button>
+          <button onClick={() => goTo(furthest + 1)} className="ml-1 flex h-7 items-center rounded-lg px-2 text-[11.5px] text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary">Latest ({furthest + 2}) »</button>
         )}
       </div>
       <div ref={spaceRef} className="flex min-h-0 flex-1 items-center justify-center">
@@ -90,7 +90,7 @@ export function GameSokoban() {
             {solved && (
               <Overlay title="Solved!">
                 <div className="text-[13px] text-white/80">{state.moves} moves · {state.pushes} pushes{best === state.moves ? " · your best" : ""}</div>
-                <Btn onClick={() => goTo(state.level + 1)}>Next level</Btn>
+                <Btn onClick={() => goTo(state.level + 1)} primary>Next level</Btn>
               </Overlay>
             )}
           </div>

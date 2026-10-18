@@ -92,7 +92,7 @@ export function GameSnake() {
             {state.status === "over" && (
               <Overlay title="Game over">
                 <div className="text-[13px] text-white/80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
-                <Btn onClick={restart}>New game</Btn>
+                <Btn onClick={restart} primary>New game</Btn>
               </Overlay>
             )}
           </div>
