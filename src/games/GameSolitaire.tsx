@@ -9,7 +9,7 @@ import {
   autoMove, canFinish, deal, drawCards, finishAll, move, rank, red, restore, suit,
   type Dst, type Src, type StateSolitaire,
 } from "./gsolitaire";
-import { Btn, Overlay, Stat, clockText, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
+import { Btn, Choice, Overlay, Stat, clockText, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
 
 const ID = "solitaire";
 const live: Clock = { live: null };
@@ -107,13 +107,9 @@ export function GameSolitaire() {
         <Stat label="Moves" value={state.moves} />
         <Stat label="Time" value={clockText(shown)} />
         <Stat label="Best" value={best === undefined ? "–" : clockText(best)} />
-        <span className="ml-auto flex flex-wrap gap-1">
-          {([1, 3] as const).map((d) => (
-            <button key={d} onClick={() => restart(d)} title={`New deal, drawing ${d}`}
-              className={`rounded-md px-2 py-1 text-[12px] transition ${d === state.draw ? "bg-accent-soft text-text-primary" : "text-text-muted hover:text-text-primary"}`}>
-              Draw {d}
-            </button>
-          ))}
+        <span className="ml-auto flex flex-wrap gap-1.5">
+          <Choice value={state.draw} onPick={(d) => restart(d)}
+            options={([1, 3] as const).map((d) => ({ value: d, label: `Draw ${d}`, title: `New deal, drawing ${d}` }))} />
           {canFinish(state) && <Btn onClick={() => act(finishAll)} title="Play every card to the foundations"><Flag size={12} /> Finish</Btn>}
           <Btn onClick={undo} disabled={!history.length} title="Undo (U)"><Undo2 size={12} /> Undo</Btn>
           <Btn onClick={() => restart()} title="New deal"><RotateCcw size={12} /> New</Btn>
@@ -162,7 +158,7 @@ export function GameSolitaire() {
             {state.status === "won" && (
               <Overlay title="You won!">
                 <div className="text-[13px] text-white/80">{state.moves} moves · {clockText(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
-                <Btn onClick={() => restart()}>New deal</Btn>
+                <Btn onClick={() => restart()} primary>New deal</Btn>
               </Overlay>
             )}
           </div>

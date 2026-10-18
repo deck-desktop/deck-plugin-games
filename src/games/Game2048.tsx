@@ -87,13 +87,13 @@ export function Game2048() {
             {state.over && (
               <Overlay title="Game over">
                 <div className="text-[13px] text-white/80">Score {state.score}</div>
-                <Btn onClick={restart}>New game</Btn>
+                <Btn onClick={restart} primary>New game</Btn>
               </Overlay>
             )}
             {winCard && !state.over && (
               <Overlay title="2048!">
                 <div className="flex gap-2">
-                  <Btn onClick={() => { setWinCard(false); focusRef.current?.focus(); }}>Keep going</Btn>
+                  <Btn onClick={() => { setWinCard(false); focusRef.current?.focus(); }} primary>Keep going</Btn>
                   <Btn onClick={restart}>New game</Btn>
                 </div>
               </Overlay>

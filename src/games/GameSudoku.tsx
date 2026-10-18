@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Lightbulb, Pencil, RotateCcw, Undo2 } from "lucide-react";
 import { useGame } from "../store";
 import { LABEL, PEERS, clearCell, conflicts, hint, newGame, restore, setValue, toggleNote, type Difficulty, type StateSudoku } from "./gsudoku";
-import { Btn, Overlay, Stat, clockText, foldClock, useClock, useFit, useFocusOnMount, type Clock } from "../ui";
+import { Btn, Choice, Overlay, Stat, clockText, foldClock, useClock, useFit, useFocusOnMount, type Clock } from "../ui";
 
 const ID = "sudoku";
 const live: Clock = { live: null };
@@ -81,13 +81,9 @@ export function GameSudoku() {
       <div className="flex flex-wrap items-center gap-2">
         <Stat label="Time" value={clockText(shown)} />
         <Stat label="Best" value={best === undefined ? "–" : clockText(best)} />
-        <span className="ml-auto flex flex-wrap gap-1">
-          {(Object.keys(LABEL) as Difficulty[]).map((d) => (
-            <button key={d} onClick={() => restart(d)}
-              className={`rounded-md px-2 py-1 text-[12px] transition ${d === state.difficulty ? "bg-accent-soft text-text-primary" : "text-text-muted hover:text-text-primary"}`}>
-              {LABEL[d]}
-            </button>
-          ))}
+        <span className="ml-auto flex flex-wrap gap-1.5">
+          <Choice value={state.difficulty} onPick={(d) => restart(d)}
+            options={(Object.keys(LABEL) as Difficulty[]).map((d) => ({ value: d, label: LABEL[d] }))} />
           <Btn onClick={() => restart()} title="New puzzle"><RotateCcw size={12} /> New</Btn>
         </span>
       </div>
@@ -129,7 +125,7 @@ export function GameSudoku() {
                 <div className="text-[13px] text-white/80">
                   {clockText(state.elapsed)}{best === state.elapsed && !state.hints ? " · a new best" : ""}{state.hints ? ` · ${state.hints} hint${state.hints > 1 ? "s" : ""}` : ""}
                 </div>
-                <Btn onClick={() => restart()}>New puzzle</Btn>
+                <Btn onClick={() => restart()} primary>New puzzle</Btn>
               </Overlay>
             )}
           </div>
@@ -138,12 +134,12 @@ export function GameSudoku() {
       <div className="flex flex-wrap items-center justify-center gap-1">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((d) => (
           <button key={d} onClick={() => put(d, notesMode)} disabled={placed[d] >= 9}
-            className="h-8 w-8 rounded-md border border-subtle bg-elev text-[15px] font-semibold text-text-primary transition hover:border-strong disabled:opacity-30">
+            className="h-8 w-8 rounded-lg border border-subtle bg-elev text-[15px] font-semibold text-text-primary transition-colors hover:border-strong disabled:opacity-30 disabled:hover:border-subtle">
             {d}
           </button>
         ))}
-        <Btn onClick={() => setNotesMode((n) => !n)} title="Notes (Space, or Shift with a digit)">
-          <Pencil size={12} /> <span className={notesMode ? "text-accent" : ""}>Notes {notesMode ? "on" : "off"}</span>
+        <Btn onClick={() => setNotesMode((n) => !n)} title="Notes (Space, or Shift with a digit)" on={notesMode}>
+          <Pencil size={12} /> Notes {notesMode ? "on" : "off"}
         </Btn>
         <Btn onClick={() => put(0, false)} title="Clear (Backspace)">Clear</Btn>
         <Btn onClick={undo} disabled={!history.length} title="Undo (Ctrl+Z)"><Undo2 size={12} /> Undo</Btn>
