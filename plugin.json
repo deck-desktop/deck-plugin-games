@@ -4,7 +4,7 @@
   "description": "Mini games in a pane: 2048, Minesweeper, Snake, Sudoku, Tetris, Words, Solitaire and Sokoban. Each is saved as you play and comes back after a restart.",
   "icon": "icon.svg",
   "color": "#a3e635",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "minDeck": "1.13.0",
   "permissions": []
 }

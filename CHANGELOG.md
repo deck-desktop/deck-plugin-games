@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 (2026-11-12)
 
 - The boards follow Deck's light themes: light surfaces, dark ink and deeper colours for
   numbers and mistakes, with the dark look unchanged on a dark theme.
