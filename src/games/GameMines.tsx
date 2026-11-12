@@ -7,9 +7,11 @@ import { Flag, RotateCcw } from "lucide-react";
 import { useGame } from "../store";
 import { LEVELS, chord, count, minesLeft, newGame, restore, reveal, toggleFlag, type Level, type StateMines } from "./gmines";
 import { Btn, Choice, Overlay, Stat, clockText as clock, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
+import { BAD, CELL, INK, RAISED, on } from "../board";
 
 const ID = "minesweeper";
-const NUM = ["", "#6ea8fe", "#63c174", "#ff6b6b", "#b197fc", "#ffa94d", "#3bc9db", "#e6e6ea", "#adb5bd"];
+// Each count's colour: the pale set on dark, a deeper one that reads on a light board.
+const NUM = ["", on("#6ea8fe", "#1c5fc7"), on("#63c174", "#2b7a3b"), on("#ff6b6b", "#c92a2a"), on("#b197fc", "#6741d9"), on("#ffa94d", "#c2560c"), on("#3bc9db", "#0b7285"), INK, on("#adb5bd", "#495057")];
 /** The game's clock, shared by every pane showing it (ui.tsx). */
 const live: Clock = { live: null };
 
@@ -81,11 +83,11 @@ export function GameMines() {
                   className="flex items-center justify-center font-bold"
                   style={{
                     width: cellSize, height: cellSize, fontSize: cellSize * 0.58, borderRadius: 3,
-                    background: isBoom ? "#c92a2a" : o ? "#1f2129" : "#363a48",
-                    color: NUM[n] || "#e6e6ea", cursor: o ? "default" : "pointer",
+                    background: isBoom ? "#c92a2a" : o ? CELL : RAISED,
+                    color: NUM[n] || INK, cursor: o ? "default" : "pointer",
                     outline: i === cursor ? "2px solid var(--accent)" : "none", outlineOffset: -2,
                   }}>
-                  {o && state.mine[i] ? "✹" : n || (!o && state.flag[i] ? <Flag size={cellSize * 0.55} color="#ff8787" /> : "")}
+                  {o && state.mine[i] ? "✹" : n || (!o && state.flag[i] ? <Flag size={cellSize * 0.55} color={BAD} /> : "")}
                 </div>
               );
             })}
@@ -96,7 +98,7 @@ export function GameMines() {
             )}
             {state.status === "won" && (
               <Overlay title="Cleared!">
-                <div className="text-[13px] text-white/80">{clock(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
+                <div className="text-[13px] opacity-80">{clock(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
                 <Btn onClick={() => restart()} primary>New game</Btn>
               </Overlay>
             )}

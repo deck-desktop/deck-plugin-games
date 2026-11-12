@@ -5,12 +5,13 @@ import { RotateCcw, Undo2 } from "lucide-react";
 import { useGame } from "../store";
 import { newGame, play, restore, undo, SIZE, type Dir, type State2048 } from "./g2048";
 import { Btn, Overlay, Stat, useFit, useFocusOnMount } from "../ui";
+import { BOARD, CELL, INK, on } from "../board";
 
 const ID = "2048";
 
 /** Tile colours, by value; past 2048 they stay the last one. */
 const TILE: Record<number, [string, string]> = {
-  2: ["#3a3d4a", "#e6e6ea"], 4: ["#45495a", "#e6e6ea"], 8: ["#b5651d", "#fff"], 16: ["#c8552b", "#fff"],
+  2: [on("#3a3d4a", "#eef0f4"), INK], 4: [on("#45495a", "#dfe3ea"), INK], 8: ["#b5651d", "#fff"], 16: ["#c8552b", "#fff"],
   32: ["#d1453b", "#fff"], 64: ["#d93a2e", "#fff"], 128: ["#c9a227", "#fff"], 256: ["#cfa52a", "#fff"],
   512: ["#d6a92c", "#fff"], 1024: ["#7c5cff", "#fff"], 2048: ["#8b5cf6", "#fff"],
 };
@@ -69,10 +70,10 @@ export function Game2048() {
       </div>
       <div ref={boardRef} className="flex min-h-0 flex-1 items-center justify-center">
         {size > 0 && (
-          <div className="relative select-none rounded-lg bg-[#1c1e26] touch-none" style={{ width: size, height: size }}
+          <div className="relative select-none rounded-lg touch-none" style={{ width: size, height: size, background: BOARD }}
             onPointerDown={(e) => { drag.current = { x: e.clientX, y: e.clientY }; }} onPointerUp={onPointerUp}>
             {state.board.map((v, i) => {
-              const [bg, fg] = v ? tile(v) : ["#262934", ""];
+              const [bg, fg] = v ? tile(v) : [CELL, ""];
               return (
                 <div key={i} className="absolute flex items-center justify-center rounded-md font-bold"
                   style={{
@@ -86,7 +87,7 @@ export function Game2048() {
             })}
             {state.over && (
               <Overlay title="Game over">
-                <div className="text-[13px] text-white/80">Score {state.score}</div>
+                <div className="text-[13px] opacity-80">Score {state.score}</div>
                 <Btn onClick={restart} primary>New game</Btn>
               </Overlay>
             )}

@@ -9,6 +9,7 @@ import {
   COLOR, type Kind, type StateTetris,
 } from "./gtetris";
 import { Btn, Overlay, Stat, useFocusOnMount, useSpace } from "../ui";
+import { BOARD, GRID_LINE } from "../board";
 
 const ID = "tetris";
 const COLORS = ["", "#3bc9db", "#fcc419", "#b197fc", "#69db7c", "#ff6b6b", "#5c7cfa", "#ffa94d"];
@@ -98,8 +99,8 @@ export function GameTetris() {
       <div ref={spaceRef} className="flex min-h-0 flex-1 items-center justify-center gap-3">
         {space.w > 0 && (
           <>
-            <div className="relative overflow-hidden rounded-md" style={{ width: cell * W, height: cell * H, background: "#1c1e26",
-              backgroundImage: "linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px)",
+            <div className="relative overflow-hidden rounded-md" style={{ width: cell * W, height: cell * H, background: BOARD,
+              backgroundImage: `linear-gradient(${GRID_LINE} 1px, transparent 1px), linear-gradient(90deg, ${GRID_LINE} 1px, transparent 1px)`,
               backgroundSize: `${cell}px ${cell}px` }}>
               {state.board.map((v, i) => v ? (
                 <div key={i} className="absolute rounded-[3px]" style={{ left: (i % W) * cell, top: Math.floor(i / W) * cell, width: cell - 1, height: cell - 1, background: COLORS[v] }} />
@@ -110,11 +111,11 @@ export function GameTetris() {
               {state.status !== "over" && piece.map(([x, y], i) => y >= 0 && (
                 <div key={`p${i}`} className="absolute rounded-[3px]" style={{ left: x * cell, top: y * cell, width: cell - 1, height: cell - 1, background: COLORS[COLOR[state.piece.kind]] }} />
               ))}
-              {state.status === "ready" && <Overlay title="Tetris"><div className="px-3 text-[13px] text-white/80">Press an arrow key to start</div></Overlay>}
-              {state.status === "paused" && <Overlay title="Paused"><div className="px-3 text-[13px] text-white/80">P or an arrow key to go on</div></Overlay>}
+              {state.status === "ready" && <Overlay title="Tetris"><div className="px-3 text-[13px] opacity-80">Press an arrow key to start</div></Overlay>}
+              {state.status === "paused" && <Overlay title="Paused"><div className="px-3 text-[13px] opacity-80">P or an arrow key to go on</div></Overlay>}
               {state.status === "over" && (
                 <Overlay title="Game over">
-                  <div className="text-[13px] text-white/80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
+                  <div className="text-[13px] opacity-80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
                   <Btn onClick={restart} primary>New game</Btn>
                 </Overlay>
               )}

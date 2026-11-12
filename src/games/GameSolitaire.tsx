@@ -10,6 +10,7 @@ import {
   type Dst, type Src, type StateSolitaire,
 } from "./gsolitaire";
 import { Btn, Choice, Overlay, Stat, clockText, foldClock, useClock, useFocusOnMount, useSpace, type Clock } from "../ui";
+import { RULE } from "../board";
 
 const ID = "solitaire";
 const live: Clock = { live: null };
@@ -29,7 +30,7 @@ function Card({ c, w, faceDown, selected, onClick, onDoubleClick, style }: {
       style={{
         width: w, height: h, cursor: onClick ? "pointer" : "default",
         background: empty ? "transparent" : faceDown ? "repeating-linear-gradient(45deg, #5b4bb7 0 4px, #4a3c9c 4px 8px)" : "#f1f1f4",
-        border: empty ? "1.5px dashed #4b4f60" : "1px solid #00000055",
+        border: empty ? `1.5px dashed ${RULE}` : "1px solid #00000055",
         outline: selected ? "2px solid var(--accent)" : "none", outlineOffset: 1,
         boxShadow: empty ? "none" : "0 1px 2px #0006", ...style,
       }}>
@@ -157,7 +158,7 @@ export function GameSolitaire() {
             })}
             {state.status === "won" && (
               <Overlay title="You won!">
-                <div className="text-[13px] text-white/80">{state.moves} moves · {clockText(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
+                <div className="text-[13px] opacity-80">{state.moves} moves · {clockText(state.elapsed)}{best === state.elapsed ? " · a new best" : ""}</div>
                 <Btn onClick={() => restart()} primary>New deal</Btn>
               </Overlay>
             )}

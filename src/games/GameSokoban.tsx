@@ -6,6 +6,7 @@ import { Check, ChevronLeft, ChevronRight, RotateCcw, Undo2 } from "lucide-react
 import { useGame } from "../store";
 import { isSolved, levelText, parse, restore, start, undo, walk, type Dir, type StateSokoban } from "./gsokoban";
 import { Btn, Overlay, Stat, useFocusOnMount, useSpace } from "../ui";
+import { RAISED } from "../board";
 
 const ID = "sokoban";
 const KEYS: Record<string, Dir> = {
@@ -73,7 +74,7 @@ export function GameSokoban() {
             {level.walls.map((wall, i) => {
               const x = (i % level.w) * cell, y = Math.floor(i / level.w) * cell;
               return wall ? (
-                <div key={i} className="absolute rounded-[3px]" style={{ left: x, top: y, width: cell, height: cell, background: "#4b4f60", boxShadow: "inset 0 -2px 0 #0004" }} />
+                <div key={i} className="absolute rounded-[3px]" style={{ left: x, top: y, width: cell, height: cell, background: RAISED, boxShadow: "inset 0 -2px 0 #0004" }} />
               ) : goals.has(i) ? (
                 <div key={i} className="absolute flex items-center justify-center" style={{ left: x, top: y, width: cell, height: cell }}>
                   <div className="rounded-full" style={{ width: cell * 0.3, height: cell * 0.3, background: "#3d9a50" }} />
@@ -89,7 +90,7 @@ export function GameSokoban() {
               style={{ left: (state.player % level.w) * cell + cell * 0.15, top: Math.floor(state.player / level.w) * cell + cell * 0.15, width: cell * 0.7, height: cell * 0.7, background: "var(--accent)" }} />
             {solved && (
               <Overlay title="Solved!">
-                <div className="text-[13px] text-white/80">{state.moves} moves · {state.pushes} pushes{best === state.moves ? " · your best" : ""}</div>
+                <div className="text-[13px] opacity-80">{state.moves} moves · {state.pushes} pushes{best === state.moves ? " · your best" : ""}</div>
                 <Btn onClick={() => goTo(state.level + 1)} primary>Next level</Btn>
               </Overlay>
             )}

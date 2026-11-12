@@ -1,6 +1,7 @@
 // What every game screen shares: fitting a square board into whatever size the pane is, and the
 // row of numbers and buttons above it.
 import { useEffect, useRef, useState } from "react";
+import { INK, on } from "./board";
 
 /**
  * The space a board has, for sizing it to a pane of any shape. A ResizeObserver rather than
@@ -84,8 +85,8 @@ export function Choice<T extends string | number>({ options, value, onPick }: {
 /** A card over the board: game over, a win, a pause. */
 export function Overlay({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-black/60 text-center backdrop-blur-[2px]">
-      <div className="text-[20px] font-semibold text-white">{title}</div>
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg text-center backdrop-blur-[2px]" style={{ background: on("rgb(0 0 0 / 0.6)", "rgb(255 255 255 / 0.78)"), color: INK }}>
+      <div className="text-[20px] font-semibold">{title}</div>
       {children}
     </div>
   );
