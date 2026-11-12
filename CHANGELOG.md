@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- The boards follow Deck's light themes: light surfaces, dark ink and deeper colours for
+  numbers and mistakes, with the dark look unchanged on a dark theme.
+
 ## 1.2.0 (2026-10-30)
 
 - Its own icon, a die, drawn from icon.svg.

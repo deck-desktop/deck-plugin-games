@@ -8,10 +8,11 @@ import { CalendarDays, Infinity as InfinityIcon, RotateCcw } from "lucide-react"
 import { useGame } from "../store";
 import { LEN, TRIES, erase, keyMarks, mark, newGame, restore, submit, type, type Mark, type Mode, type StateWords } from "./gwords";
 import { Btn, Choice, useFocusOnMount } from "../ui";
+import { BAD, INK, RAISED, RULE, RULE_THIN, on } from "../board";
 
-const COLORS: Record<Mark, string> = { hit: "#3d9a50", near: "#c49a1f", miss: "#3a3d4a" };
+const COLORS: Record<Mark, string> = { hit: "#3d9a50", near: "#c49a1f", miss: on("#3a3d4a", "#8a90a0") };
 /** A letter already ruled out: red on the keyboard, and red when typed into a new guess. */
-const OUT = "#b33a3a", OUT_TEXT = "#ff6b6b";
+const OUT = "#b33a3a", OUT_TEXT = BAD;
 const ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 
 export function GameWords() {
@@ -71,8 +72,8 @@ export function GameWords() {
                 <div key={i} className="flex h-11 w-11 items-center justify-center rounded-md text-[20px] font-bold uppercase"
                   style={{
                     background: m ? COLORS[m[i]] : "transparent",
-                    color: !m && word[i] && marks[word[i]] === "miss" ? OUT_TEXT : "#f1f1f4",
-                    border: m ? "none" : `2px solid ${word[i] ? "#6b7088" : "#34374a"}`,
+                    color: !m && word[i] && marks[word[i]] === "miss" ? OUT_TEXT : m ? "#f1f1f4" : INK,
+                    border: m ? "none" : `2px solid ${word[i] ? RULE : RULE_THIN}`,
                   }}>
                   {word[i] ?? ""}
                 </div>
@@ -128,7 +129,7 @@ function KeyCap({ label, mark: m, wide, onClick }: { label: string; mark?: Mark;
   return (
     <button onClick={onClick} tabIndex={-1}
       className={`flex h-10 items-center justify-center rounded-md text-[13px] font-semibold uppercase text-white transition hover:brightness-125 ${wide ? "px-2.5" : "w-8"}`}
-      style={{ background: m === "miss" ? OUT : m ? COLORS[m] : "#4b4f60" }}>
+      style={{ background: m === "miss" ? OUT : m ? COLORS[m] : RAISED, ...(m ? {} : { color: INK }) }}>
       {label}
     </button>
   );

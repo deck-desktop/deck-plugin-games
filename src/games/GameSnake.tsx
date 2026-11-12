@@ -8,6 +8,7 @@ import { Pause, Play, RotateCcw } from "lucide-react";
 import { useGame } from "../store";
 import { H, W, newGame, restore, speed, step, turn, type Dir, type StateSnake } from "./gsnake";
 import { Btn, Overlay, Stat, useFit, useFocusOnMount } from "../ui";
+import { BOARD, GRID_LINE } from "../board";
 
 const ID = "snake";
 const KEYS: Record<string, Dir> = {
@@ -79,19 +80,19 @@ export function GameSnake() {
       </div>
       <div ref={boardRef} className="flex min-h-0 flex-1 items-center justify-center">
         {size > 0 && (
-          <div className="relative overflow-hidden rounded-lg" style={{ width: size, height: size, background: "#1c1e26",
-            backgroundImage: `linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px)`,
+          <div className="relative overflow-hidden rounded-lg" style={{ width: size, height: size, background: BOARD,
+            backgroundImage: `linear-gradient(${GRID_LINE} 1px, transparent 1px), linear-gradient(90deg, ${GRID_LINE} 1px, transparent 1px)`,
             backgroundSize: `${cell}px ${cell}px` }}>
             <div className="absolute rounded-full" style={{ ...at(state.food), background: "#ff6b6b", transform: "scale(0.7)" }} />
             {state.snake.map((c, i) => (
               <div key={i} className="absolute" style={{ ...at(c), borderRadius: cell * 0.25, transform: "scale(0.92)",
                 background: i === 0 ? "var(--accent)" : "#8f7bd8", opacity: i === 0 ? 1 : Math.max(0.45, 1 - i / (state.snake.length * 1.4)) }} />
             ))}
-            {state.status === "ready" && <Overlay title="Snake"><div className="text-[13px] text-white/80">Press an arrow key to start</div></Overlay>}
-            {state.status === "paused" && <Overlay title="Paused"><div className="text-[13px] text-white/80">Space or an arrow key to go on</div></Overlay>}
+            {state.status === "ready" && <Overlay title="Snake"><div className="text-[13px] opacity-80">Press an arrow key to start</div></Overlay>}
+            {state.status === "paused" && <Overlay title="Paused"><div className="text-[13px] opacity-80">Space or an arrow key to go on</div></Overlay>}
             {state.status === "over" && (
               <Overlay title="Game over">
-                <div className="text-[13px] text-white/80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
+                <div className="text-[13px] opacity-80">Score {state.score}{state.score > 0 && state.score === state.best ? " · a new best" : ""}</div>
                 <Btn onClick={restart} primary>New game</Btn>
               </Overlay>
             )}

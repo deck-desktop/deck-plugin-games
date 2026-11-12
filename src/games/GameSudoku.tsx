@@ -7,6 +7,7 @@ import { Lightbulb, Pencil, RotateCcw, Undo2 } from "lucide-react";
 import { useGame } from "../store";
 import { LABEL, PEERS, clearCell, conflicts, hint, newGame, restore, setValue, toggleNote, type Difficulty, type StateSudoku } from "./gsudoku";
 import { Btn, Choice, Overlay, Stat, clockText, foldClock, useClock, useFit, useFocusOnMount, type Clock } from "../ui";
+import { BAD, BOARD, INK, RULE, RULE_THIN, on } from "../board";
 
 const ID = "sudoku";
 const live: Clock = { live: null };
@@ -89,12 +90,12 @@ export function GameSudoku() {
       </div>
       <div ref={boardRef} className="flex min-h-0 flex-1 items-center justify-center">
         {size > 0 && (
-          <div className="relative select-none overflow-hidden rounded-md" style={{ width: size, height: size, background: "#1c1e26",
-            display: "grid", gridTemplateColumns: "repeat(9, 1fr)", border: "2px solid #6b7088" }}>
+          <div className="relative select-none overflow-hidden rounded-md" style={{ width: size, height: size, background: BOARD,
+            display: "grid", gridTemplateColumns: "repeat(9, 1fr)", border: `2px solid ${RULE}` }}>
             {state.values.map((v, i) => {
               const r = Math.floor(i / 9), c = i % 9;
               const given = !!state.puzzle[i];
-              const bg = i === sel ? "#3d3566" : v && v === selVal ? "#2f2a4f" : related.has(i) ? "#24262f" : "transparent";
+              const bg = i === sel ? on("#3d3566", "color-mix(in srgb, var(--accent) 22%, white)") : v && v === selVal ? on("#2f2a4f", "color-mix(in srgb, var(--accent) 12%, white)") : related.has(i) ? on("#24262f", "var(--bg-card, #ffffff)") : "transparent";
               return (
                 <div key={i}
                   onMouseDown={(e) => { if (e.button !== 2) setSel(i); }}
@@ -103,10 +104,10 @@ export function GameSudoku() {
                   className="relative flex items-center justify-center"
                   style={{
                     background: bg, cursor: "pointer",
-                    borderRight: c === 8 ? "none" : c % 3 === 2 ? "2px solid #6b7088" : "1px solid #34374a",
-                    borderBottom: r === 8 ? "none" : r % 3 === 2 ? "2px solid #6b7088" : "1px solid #34374a",
+                    borderRight: c === 8 ? "none" : c % 3 === 2 ? `2px solid ${RULE}` : `1px solid ${RULE_THIN}`,
+                    borderBottom: r === 8 ? "none" : r % 3 === 2 ? `2px solid ${RULE}` : `1px solid ${RULE_THIN}`,
                     fontSize: cell * 0.55, fontWeight: given ? 700 : 500,
-                    color: bad.has(i) && !given ? "#ff6b6b" : bad.has(i) ? "#ffa8a8" : given ? "#e6e6ea" : "var(--accent)",
+                    color: bad.has(i) && !given ? BAD : bad.has(i) ? on("#ffa8a8", "#e03131") : given ? INK : "var(--accent)",
                   }}>
                   {v ? v : state.notes[i] ? (
                     <div className="grid h-full w-full grid-cols-3 grid-rows-3 p-[2px]" style={{ fontSize: cell * 0.2, color: "#9aa0b4" }}>
@@ -122,7 +123,7 @@ export function GameSudoku() {
             })}
             {state.status === "won" && (
               <Overlay title="Solved!">
-                <div className="text-[13px] text-white/80">
+                <div className="text-[13px] opacity-80">
                   {clockText(state.elapsed)}{best === state.elapsed && !state.hints ? " · a new best" : ""}{state.hints ? ` · ${state.hints} hint${state.hints > 1 ? "s" : ""}` : ""}
                 </div>
                 <Btn onClick={() => restart()} primary>New puzzle</Btn>
